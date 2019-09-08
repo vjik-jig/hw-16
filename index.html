@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      body {
+        font-size: 35px;
+      }
+      a {
+        color: #000000;
+        text-decoration: none;
+      }
+      .navigation {
+        display: flex;
+        padding: 0;
+        margin: 0;
+      }
+      .navigation li {
+        position: relative;
+        list-style: none;
+        outline: 1px solid #0c3370;
+        background-color: #aabfe0;
+      }
+      .navigation-sub {
+        padding: 0;
+        margin: 0;
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        list-style: none;
+      }
+      .show {
+        display: block;
+      }
+      /* .link-item:hover .navigation-sub {
+        display: block;
+      } */
+    </style>
+    <title>My Menu With JS!</title>
+  </head>
+  <body>
+    <script>
+      let tagsUl = [
+        {
+          tagName: "ul",
+          tagClass: "navigation",
+          text: null
+        }
+      ];
+      let tagsLi = [
+        {
+          tagName: "li",
+          tagClass: "link-item",
+          text: "menu # 1"
+        },
+        {
+          tagName: "li",
+          tagClass: "link-item",
+          text: "menu # 2"
+        },
+        {
+          tagName: "li",
+          tagClass: "link-item",
+          text: "menu # 3"
+        }
+      ];
+      let tagsUlSub = [
+        {
+          tagName: "ul",
+          tagClass: "navigation-sub",
+          text: null
+        }
+      ];
+      let tagsLiSub = [
+        {
+          tagName: "li",
+          tagClass: "link-item-sub",
+          text: null
+        },
+        {
+          tagName: "li",
+          tagClass: "link-item-sub",
+          text: null
+        },
+        {
+          tagName: "li",
+          tagClass: "link-item-sub",
+          text: null
+        }
+      ];
+      let aHref = [
+        {
+          tagName: "a",
+          hRef: "https://www.google.com",
+          text: "link"
+        }
+      ];
+
+      const setHtml = function(arr, insPoint, insPosition) {
+        if (insPoint === "body") {
+          if (insPosition === "prepend") {
+            arr.forEach(function(item) {
+              let elem = document.createElement(item.tagName);
+              elem.classList = item.tagClass;
+              elem.innerText = item.text;
+              document.body.prepend(elem);
+            });
+          } else if (insPosition === "append") {
+            arr.forEach(function(item) {
+              let elem = document.createElement(item.tagName);
+              elem.classList = item.tagClass;
+              elem.innerText = item.text;
+              document.body.append(elem);
+            });
+          }
+        } else {
+          let foundSelec = document.querySelectorAll(insPoint);
+          if (insPosition === "prepend") {
+            foundSelec.forEach(function(selector) {
+              arr.forEach(function(itemArr) {
+                let $innerBlock = document.createElement(itemArr.tagName);
+                $innerBlock.classList = itemArr.tagClass;
+                $innerBlock.innerText = itemArr.text;
+                selector.prepend($innerBlock);
+              });
+            });
+          } else if (insPosition === "append") {
+            foundSelec.forEach(function(selector) {
+              arr.forEach(function(itemArr) {
+                let $innerBlock = document.createElement(itemArr.tagName);
+                $innerBlock.classList = itemArr.tagClass;
+                $innerBlock.innerText = itemArr.text;
+                selector.append($innerBlock);
+              });
+            });
+          }
+        }
+      };
+
+      const renderHref = function(arr, parrentEl) {
+        let parrentArr = document.querySelectorAll(parrentEl);
+        parrentArr.forEach(function(itemParrent) {
+          arr.forEach(function(itemA) {
+            let $a = document.createElement(itemA.tagName);
+            $a.href = itemA.hRef;
+            $a.innerText = itemA.text;
+            itemParrent.append($a);
+          });
+        });
+      };
+
+      setHtml(tagsUl, "body", "prepend");
+      setHtml(tagsLi, ".navigation", "append");
+      setHtml(tagsUlSub, ".link-item", "append");
+      setHtml(tagsLiSub, ".navigation-sub", "append");
+      renderHref(aHref, ".link-item-sub");
+
+      // Event Listeners
+
+      let $dropMenu = document.querySelectorAll(".link-item");
+      let $dropUl = document.querySelectorAll(".link-item > ul");
+
+      $dropMenu.forEach(item => {
+        item.addEventListener("click", function() {
+          $dropUl.forEach(item => {
+            item.classList.remove("show");
+          });
+          let elem = item.lastElementChild;
+          elem.classList.add("show");
+        });
+      });
+
+      let $links = document.querySelectorAll(".link-item-sub");
+      $links.forEach(item => {
+        item.addEventListener("click", e => {
+          e.preventDefault();
+          let conFirm = confirm("Are u really want to leave this page??");
+          if (confirm) {
+            let linkInLi = e.target.getAttribute("href");
+            window.location.href = linkInLi;
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
